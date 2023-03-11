@@ -8,27 +8,30 @@ import (
 )
 
 type Config struct {
-	DbHost string `yaml:"DbHost"`
-	DbName string `yaml:"DbName"`
-	DbPass string `yaml:"DbPass"`
-	DbUser string `yaml:"DbUser"`
-	DB     *gorm.DB
+	DbHost     string `yaml:"DbHost"`
+	DbName     string `yaml:"DbName"`
+	DbPass     string `yaml:"DbPass"`
+	DbUser     string `yaml:"DbUser"`
+	DB         *gorm.DB
+	ServerPort string `yaml:"ServerPort"`
 }
 
 var (
-	dbHost = "localhost:3306"
-	dbName = "evergreen_music_db"
-	dbPass = "green"
-	dbUser = "root"
+	dbHost     = "localhost:3306"
+	dbName     = "evergreen_music_db"
+	dbPass     = "green"
+	dbUser     = "root"
+	serverPort = "8081"
 )
 
 func NewConfig() (*Config, error) {
 	var err error
 	cfg := &Config{
-		DbHost: dbHost,
-		DbName: dbName,
-		DbPass: dbPass,
-		DbUser: dbUser,
+		DbHost:     dbHost,
+		DbName:     dbName,
+		DbPass:     dbPass,
+		DbUser:     dbUser,
+		ServerPort: serverPort,
 	}
 
 	// update config values from env, if any
@@ -55,6 +58,10 @@ func (c *Config) GETENVs() {
 	}
 
 	if val, found := os.LookupEnv("CONFIG_DBUSER"); found {
-		c.DbPass = val
+		c.DbUser = val
+	}
+
+	if val, found := os.LookupEnv("CONFIG_SERVER_PORT"); found {
+		c.ServerPort = val
 	}
 }

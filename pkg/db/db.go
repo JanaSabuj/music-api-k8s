@@ -7,6 +7,7 @@ import (
 	"log"
 )
 
+// InitDB return a new db connection
 func InitDB(dsn string) *gorm.DB {
 	fmt.Println(dsn)
 	db, err := gorm.Open(mysql.New(mysql.Config{
