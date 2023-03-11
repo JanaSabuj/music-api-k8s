@@ -13,7 +13,7 @@ func GetSongHandler(w http.ResponseWriter, r *http.Request) {
 	// get songs
 	songs, err := musicapp.GetAllSongs(gcfg)
 	if err != nil {
-		log.Fatal("get songs api failed", err.Error())
+		log.Print("GET songs api failed", err.Error())
 		w.Write([]byte("Error getting songs!"))
 		return
 	}
@@ -31,8 +31,8 @@ func PostSongHandler(w http.ResponseWriter, r *http.Request) {
 
 	err := musicapp.PostSong(gcfg, &newsong)
 	if err != nil {
-		log.Fatal("post songs api failed", err.Error())
-		w.Write([]byte("Error inserting song !"))
+		log.Print("POST songs api failed", err.Error())
+		w.Write([]byte("Error posting song !"))
 		return
 	}
 

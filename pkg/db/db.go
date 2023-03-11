@@ -1,7 +1,6 @@
 package db
 
 import (
-	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
@@ -9,7 +8,6 @@ import (
 
 // InitDB return a new db connection
 func InitDB(dsn string) *gorm.DB {
-	fmt.Println(dsn)
 	db, err := gorm.Open(mysql.New(mysql.Config{
 		DSN:                       dsn,
 		DefaultStringSize:         256,
@@ -19,14 +17,12 @@ func InitDB(dsn string) *gorm.DB {
 		SkipInitializeWithVersion: false,
 	}), &gorm.Config{})
 	if err != nil {
-		fmt.Println("failed to connect database")
-		log.Fatal(err)
+		log.Fatal("failed to connect to database", err)
 	}
 
 	d, err := db.DB()
 	if err != nil {
-		fmt.Println("mysql init failed")
-		log.Fatal(err)
+		log.Fatal("mysql init failed", err)
 	}
 
 	d.SetMaxIdleConns(10)

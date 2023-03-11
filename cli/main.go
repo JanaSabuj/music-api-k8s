@@ -16,12 +16,12 @@ func init() {
 	// get a config
 	cfg, err = config.NewConfig()
 	if err != nil {
-		panic(err)
+		log.Fatal("Config init failed", err)
 	}
 
 	// migrate db
 	if err = musicapp.DbInit(cfg.DB); err != nil {
-		panic(err)
+		log.Fatal("DB migration failed...")
 	}
 }
 
