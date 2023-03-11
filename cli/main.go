@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/JanaSabuj/music-api-k8s/pkg/config"
 	"github.com/JanaSabuj/music-api-k8s/pkg/musicapp"
 	"github.com/JanaSabuj/music-api-k8s/pkg/server"
@@ -16,12 +15,11 @@ func init() {
 
 	// get a config
 	cfg, err = config.NewConfig()
-	fmt.Println(cfg, err)
 	if err != nil {
 		panic(err)
 	}
 
-	// migrate evergreen_music_db
+	// migrate db
 	if err = musicapp.DbInit(cfg.DB); err != nil {
 		panic(err)
 	}

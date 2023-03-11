@@ -1,7 +1,9 @@
 package musicapp
 
+import "gorm.io/gorm"
+
 type Song struct {
-	Id     string `gorm:"PrimaryKey"`
-	Name   string
-	Artist string
+	gorm.Model
+	Name   string `json:"name"`
+	Artist string `json:"artist"`
 }

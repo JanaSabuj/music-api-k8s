@@ -11,8 +11,20 @@ func GetAllSongs(cfg *config.Config) ([]*Song, error) {
 	// get songs
 	songs, err := musicOrm.Get(cfg.DB)
 	if err != nil {
-		log.Fatal("Error getting songs ", err.Error())
+		log.Fatal("error Getting songs from DB", err.Error())
+		return nil, err
 	}
 
-	return songs, err
+	return songs, nil
+}
+
+func PostSong(cfg *config.Config, newsong *Song) error {
+	// post song
+	err := musicOrm.Post(cfg.DB, newsong)
+	if err != nil {
+		log.Fatal("error posting songs to DB", err.Error())
+		return err
+	}
+
+	return nil
 }
