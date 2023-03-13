@@ -1,5 +1,8 @@
-# create table
+# create database
 create database evergreen_music_db;
+
+# use database
+use evergreen_music_db;
 
 # insert into table songs
 INSERT INTO songs (created_at, updated_at, name, artist) VALUES (now(), now(), "Burn It Down", "Linkin Park");
