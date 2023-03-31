@@ -1,3 +1,12 @@
+
+{{- define "music-helm.dep" -}}
+{{- if .Values.application.dep -}}
+{{ print .Values.application.dep }}
+{{- else -}}
+{{ print .Release.Name }}
+{{- end -}} 
+{{- end -}}
+
 {{/*
 Expand the name of the chart.
 */}}

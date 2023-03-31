@@ -1,0 +1,6 @@
+database:
+  volume:
+    storageClassName: hostpath
+  rootpassword: green
+application:
+  dep: music-helm-depl
