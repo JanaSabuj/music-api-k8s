@@ -1,0 +1,223 @@
+NAME: music-helm-release
+LAST DEPLOYED: Fri Mar 31 19:36:03 2023
+NAMESPACE: music-ns
+STATUS: pending-install
+REVISION: 1
+HOOKS:
+---
+# Source: music-helm/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "music-helm-release-test-connection"
+  labels:
+    helm.sh/chart: music-helm-0.1.0
+    app.kubernetes.io/name: music-helm
+    app.kubernetes.io/instance: music-helm-release
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['music-helm-release:80']
+  restartPolicy: Never
+MANIFEST:
+---
+# Source: music-helm/templates/ns-musicapi.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: music-ns
+spec: {}
+status: {}
+---
+# Source: music-helm/templates/ns-mysql.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: db-ns
+spec: {}
+status: {}
+---
+# Source: music-helm/templates/secret-musicapi.yaml
+apiVersion: v1
+data:
+  rootpassword:  Z3JlZW4=
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: mysql-password
+  namespace: music-ns
+---
+# Source: music-helm/templates/secret-mysql.yaml
+apiVersion: v1
+data:
+  rootpassword: Z3JlZW4=
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: mysql-password
+  namespace: db-ns
+---
+# Source: music-helm/templates/configmap-musicapi.yaml
+apiVersion: v1
+data:
+  dbname: evergreen_music_db
+  dbuser: root
+  serverport: "8081"
+  dbhost: mysql.db-ns.svc.cluster.local:3306
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: music-cm
+  namespace: music-ns
+---
+# Source: music-helm/templates/pvc-mysql.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+  namespace: db-ns
+spec:
+  storageClassName: abcd
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+---
+# Source: music-helm/templates/service-musicapi.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: musicapi
+  name: musicapi
+  namespace: music-ns
+spec:
+  ports:
+  - port: 8081
+    protocol: TCP
+    targetPort: 8081
+  selector:
+    app: musicapi
+status:
+  loadBalancer: {}
+---
+# Source: music-helm/templates/service-mysql.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: db-ns
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: mysql
+  clusterIP: None
+---
+# Source: music-helm/templates/deployment-musicapi.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: musicapi
+  name: musicapi
+  namespace: music-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: musicapi
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: musicapi
+    spec:
+      containers:
+      - image: sabujjana/musicapik8s:0.1.0
+        name: musicapik8s
+        resources: {}
+        env:
+          - name: CONFIG_DBPASS
+            valueFrom:
+              secretKeyRef:
+                key: rootpassword
+                name: mysql-password
+          - name: CONFIG_DBNAME
+            valueFrom:
+              configMapKeyRef:
+                key: dbname
+                name: music-cm
+          - name: CONFIG_DBUSER
+            valueFrom:
+              configMapKeyRef:
+                key: dbuser
+                name: music-cm
+          - name: CONFIG_SERVER_PORT
+            valueFrom:
+              configMapKeyRef:
+                key: serverport
+                name: music-cm
+          - name: CONFIG_DBHOST
+            valueFrom:
+              configMapKeyRef:
+                key: dbhost
+                name: music-cm
+status: {}
+---
+# Source: music-helm/templates/deployment-mysql.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: db-ns
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - image: mysql:latest
+          name: mysql
+          env:
+            # Use secret in real usage
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: rootpassword
+                  name: mysql-password
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-pv-claim
+
+NOTES:
+1. Get the application URL by running these commands:
+  export POD_NAME=$(kubectl get pods --namespace music-ns -l "app.kubernetes.io/name=music-helm,app.kubernetes.io/instance=music-helm-release" -o jsonpath="{.items[0].metadata.name}")
+  export CONTAINER_PORT=$(kubectl get pod --namespace music-ns $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace music-ns port-forward $POD_NAME 8080:$CONTAINER_PORT

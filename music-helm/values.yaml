@@ -5,7 +5,7 @@
 database:
   volume:
     storageClassName: hostpath
-  # rootpassword: green
+  rootpassword: green
 
 replicaCount: 1
 
