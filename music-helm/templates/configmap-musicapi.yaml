@@ -1,0 +1,11 @@
+apiVersion: v1
+data:
+  dbname: evergreen_music_db
+  dbuser: root
+  serverport: "8081"
+  dbhost: mysql.db-ns.svc.cluster.local:3306
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: music-cm
+  namespace: music-ns

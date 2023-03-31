@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: musicapi
+  name: musicapi
+  namespace: music-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: musicapi
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: musicapi
+    spec:
+      containers:
+      - image: sabujjana/musicapik8s:0.1.0
+        name: musicapik8s
+        resources: {}
+        env:
+          - name: CONFIG_DBPASS
+            valueFrom:
+              secretKeyRef:
+                key: rootpassword
+                name: mysql-password
+          - name: CONFIG_DBNAME
+            valueFrom:
+              configMapKeyRef:
+                key: dbname
+                name: music-cm
+          - name: CONFIG_DBUSER
+            valueFrom:
+              configMapKeyRef:
+                key: dbuser
+                name: music-cm
+          - name: CONFIG_SERVER_PORT
+            valueFrom:
+              configMapKeyRef:
+                key: serverport
+                name: music-cm
+          - name: CONFIG_DBHOST
+            valueFrom:
+              configMapKeyRef:
+                key: dbhost
+                name: music-cm
+status: {}
