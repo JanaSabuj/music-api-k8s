@@ -11,3 +11,7 @@ https://hub.docker.com/r/sabujjana/musicapik8s
 
 ## Architecture
 ![image](https://user-images.githubusercontent.com/39147514/224630982-06befd8a-557b-470e-a257-00c36b024b7f.png)
+
+## Helm Architecture
+![image](https://user-images.githubusercontent.com/39147514/229269342-309ba25c-b55c-4451-b77c-0f687d0aa706.png)
+
