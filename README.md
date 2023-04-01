@@ -1,10 +1,10 @@
 # music-api-k8s
 A golang backend music api deployed in k8s
 
-## Medium Blog Link
-Building: https://medium.com/@SabujJanaCodes/building-a-golang-music-api-and-deploying-it-on-k8s-go-mysql-k8s-841612d13479
+## Medium Blog Links
+Building the api: https://medium.com/@SabujJanaCodes/building-a-golang-music-api-and-deploying-it-on-k8s-go-mysql-k8s-841612d13479
 
-Helm Chart: https://medium.com/@SabujJanaCodes/helm-ing-our-kubernetes-deployed-golang-music-api-k8s-mysql-go-helm-docker-registry-e9f39252d589
+Creating Helm Chart: https://medium.com/@SabujJanaCodes/helm-ing-our-kubernetes-deployed-golang-music-api-k8s-mysql-go-helm-docker-registry-e9f39252d589
 
 ## Docker Hub Image
 https://hub.docker.com/r/sabujjana/musicapik8s
