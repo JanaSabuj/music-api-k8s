@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  music-helm:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2023-04-01T09:37:39.121177+05:30"
+    description: A Helm chart for deploying sabujjana/musicapik8s:0.1.0
+    digest: a22a5504cd03082ecb0efa183d61988a96e6237cd3b9437385d1cc22887de49d
+    name: music-helm
+    type: application
+    urls:
+    - music-helm-0.1.0.tgz
+    version: 0.1.0
+generated: "2023-04-01T09:37:39.108015+05:30"
