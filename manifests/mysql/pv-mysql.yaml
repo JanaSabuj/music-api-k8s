@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-pv-claim
-  namespace: db-ns
+  name: mysql-pv
 spec:
   storageClassName: hostpath
   accessModes:
     - ReadWriteOnce
-  volumeName: mysql-pv
   resources:
     requests:
       storage: 20Gi
+  hostPath:
+    path: "/opt/data/mysql"
